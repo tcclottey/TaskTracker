@@ -1,7 +1,7 @@
 package com.bitstack.tasktracker.controller;
 
 import com.bitstack.tasktracker.model.Task;
-import com.bitstack.tasktracker.repository.TaskRepository;
+import com.bitstack.tasktracker.repository.AppRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
-public class TaskController {
+public class AppController {
 
     @Autowired
-    private TaskRepository taskRepository;
+    private AppRepository taskRepository;
 
     @GetMapping
     public List<Task> getAllTasks() {
