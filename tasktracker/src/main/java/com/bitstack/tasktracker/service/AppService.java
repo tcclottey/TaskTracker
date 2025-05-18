@@ -1,5 +1,6 @@
 package com.bitstack.tasktracker.service;
 
+import com.bitstack.tasktracker.DTO.TaskResponseDTO;
 import com.bitstack.tasktracker.model.Task;
 import com.bitstack.tasktracker.model.User;
 import com.bitstack.tasktracker.repository.TaskRepository;
@@ -28,7 +29,25 @@ public class AppService {
     public Task saveTask(Task task) {
         return taskRepository.save(task);
     }
+    
+    public TaskResponseDTO mapToDto(Task task) {
+        TaskResponseDTO dto = new TaskResponseDTO();
+        dto.setId(task.getId());
+        dto.setTitle(task.getTitle());
+        dto.setDescription(task.getDescription());
+        dto.setDueDate(task.getDueDate());
+        dto.setCompleted(task.isCompleted());
+        dto.setCreatedBy(task.getCreatedBy());
+        dto.setUpdatedBy(task.getUpdatedBy());
+        dto.setCreatedAt(task.getCreatedAt());
+        dto.setUpdatedAt(task.getUpdatedAt());
+        dto.setAssignedToEmail(task.getAssignedTo() != null ? task.getAssignedTo().getEmail() : null);
+        dto.setOwnerEmail(task.getUser() != null ? task.getUser().getEmail() : null);
+        return dto;
+    }
 
+    
+    	
     // ==== User Services ====
     public User registerUser(User user) {
         return userRepository.save(user);

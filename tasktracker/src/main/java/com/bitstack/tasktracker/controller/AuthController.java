@@ -10,6 +10,8 @@ import com.bitstack.tasktracker.security.JwtUtil;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+import java.time.LocalDateTime;
+
 import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +47,13 @@ public class AuthController {
         }
 
         User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setProfileImageUrl(request.getProfileImageUrl()); // Can be null
+        user.setCreatedAt(LocalDateTime.now());
         
      // ✅ Check if it's the first user — assign ADMIN
         if (userRepository.count() == 0) {
@@ -75,9 +81,16 @@ public class AuthController {
     public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
         User user = userRepository.findByUsername(authentication.getName())
                                   .orElseThrow(() -> new RuntimeException("User not found"));
-        UserResponseDTO response = new UserResponseDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        UserResponseDTO response = new UserResponseDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getProfileImageUrl()
+            );
 
-        return ResponseEntity.ok(response);
-    }
-
+            return ResponseEntity.ok(response);
+        }
 }

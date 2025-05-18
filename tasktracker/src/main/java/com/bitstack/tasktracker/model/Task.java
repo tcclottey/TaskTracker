@@ -2,11 +2,11 @@ package com.bitstack.tasktracker.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
-
-import org.springframework.data.annotation.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
@@ -35,7 +35,6 @@ public class Task {
     @Schema(description = "Indicates if the task is completed", example = "false")
     private boolean completed;
 
-    // Auditing Fields
     @CreatedBy
     @Schema(description = "Username who created the task", example = "admin")
     private String createdBy;
@@ -52,50 +51,51 @@ public class Task {
     @Schema(description = "When the task was last updated", example = "2025-05-12T08:30:00")
     private LocalDateTime updatedAt;
 
-    // Relationship
+    // Creator (who added the task)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
 
-    // Getters and setters
-    public Long getId() { return id; }
+    // Assigned target user
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_to_id")
+    @JsonIgnore
+    private User assignedTo;
 
+    // --- Getters and Setters ---
+
+    public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
-
     public void setTitle(String title) { this.title = title; }
 
     public String getDescription() { return description; }
-
     public void setDescription(String description) { this.description = description; }
 
     public LocalDate getDueDate() { return dueDate; }
-
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
     public boolean isCompleted() { return completed; }
-
     public void setCompleted(boolean completed) { this.completed = completed; }
 
     public String getCreatedBy() { return createdBy; }
-
     public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
 
     public String getUpdatedBy() { return updatedBy; }
-
     public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
-
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
-
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     public User getUser() { return user; }
-
     public void setUser(User user) { this.user = user; }
+
+    public User getAssignedTo() { return assignedTo; }
+    public void setAssignedTo(User assignedTo) { this.assignedTo = assignedTo; }
 }
+// --- End of Task class ---
